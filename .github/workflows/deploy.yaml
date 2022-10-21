@@ -41,4 +41,4 @@ jobs:
         env:
           USERNAME: ${{ secrets.GANDI_CALENDAR_USERNAME }}
           HOST: ${{ secrets.GANDI_CALENDAR_HOST }}
-        run: scp -i ~/.ssh/gandi_key -r static $USERNAME@$HOST:/var/calendar-halogen/halogen
+        run: ./.github/scripts/mv_static.sh
