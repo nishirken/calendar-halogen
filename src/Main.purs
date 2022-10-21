@@ -1,20 +1,18 @@
 module Main where
 
-import Data.Maybe
 import Prelude
-import Web.HTML
 
+import Data.Maybe (Maybe(..))
 import Effect (Effect)
-import Effect.Console (log)
 import Effect.Exception (throw)
 import Web.DOM (Document, Element)
 import Web.DOM.Document (createElement, toNonElementParentNode)
-import Web.DOM.Document as D
 import Web.DOM.Element (setAttribute, toEventTarget, toNode)
 import Web.DOM.Node (appendChild, setTextContent)
 import Web.DOM.NonElementParentNode (getElementById)
 import Web.Event.Event (Event, target)
 import Web.Event.EventTarget (addEventListener, eventListener)
+import Web.HTML (HTMLInputElement, window)
 import Web.HTML.Event.EventTypes (input)
 import Web.HTML.HTMLDocument (toDocument)
 import Web.HTML.HTMLInputElement (fromEventTarget, value)

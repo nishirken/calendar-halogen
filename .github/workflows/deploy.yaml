@@ -1,0 +1,44 @@
+name: "Deploy"
+
+on:
+  workflow_dispatch
+    
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: purescript-contrib/setup-purescript@main
+        with:
+          purescript: "0.15.2"
+          spago: "latest"
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            .spago
+            output
+          key: ${{ runner.os }}-${{ hashFiles('packages.dhall', 'spago.dhall') }}
+
+      - name: "Install"
+        run: |
+          npm i -g esbuild
+          spago install
+      
+      - name: "Build"
+        run: spago bundle-app -t static/index.js
+
+      - uses: shimataro/ssh-key-action@v2
+        with:
+         key: ${{ secrets.GANDI_CALENDAR_PRIVATE_KEY }}
+         name: "gandi_key"
+         known_hosts: ${{ secrets.GANDI_CALENDAR_KNOWN_HOSTS }}
+
+      - name: "Deploy"
+        env:
+          USERNAME: ${{ secrets.GANDI_CALENDAR_USERNAME }}
+          HOST: ${{ secrets.GANDI_CALENDAR_HOST }}
+        run: scp -i ~/.ssh/gandi_key -r static $USERNAME@$HOST:/var/calendar-halogen/halogen
