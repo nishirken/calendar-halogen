@@ -20,7 +20,7 @@
             spago
             nodePackages.purescript-language-server
             nodePackages.pscid
-            nodePackages.live-server
+            nodejs-16_x
           ];
         };
       });
